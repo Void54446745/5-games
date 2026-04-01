@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
 class Star(pygame.sprite.Sprite):
     def __init__(self, groups):
         super().__init__(groups)
-        self.image = star_surf
+        self.image = pygame.image.load(join('images', 'star.png')).convert_alpha()
         self.rect = self.image.get_frect(center = (random.randint(0, WINDOW_WIDTH), random.randint(0, WINDOW_HEIGHT)))
     def update(self, dt):
         screen.blit(self.image, self.rect)
@@ -46,9 +46,6 @@ all_sprites = pygame.sprite.Group()
 player = Player(all_sprites)
 
 # Imports
-
-star_surf = pygame.image.load(join('images', 'star.png')).convert_alpha()
-star_positions = [(random.randint(0, WINDOW_WIDTH), random.randint(0, WINDOW_HEIGHT)) for i in range (20)]
 
 meteor_surf = pygame.image.load(join('images', 'meteor.png')).convert_alpha()
 meteor_rect = meteor_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
