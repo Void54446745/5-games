@@ -20,7 +20,7 @@ x = 100
 
 player_surf = pygame.image.load(join('images', 'player.png')).convert_alpha()
 player_rect = player_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
-player_direction = pygame.math.Vector2(1, 1)
+player_direction = pygame.math.Vector2()
 player_speed = 300
 
 star_surf = pygame.image.load(join('images', 'star.png')).convert_alpha()
@@ -42,6 +42,17 @@ while running:
         #     print(1)
         # if event.type == pygame.MOUSEMOTION:
         #     player_rect.center = event.pos
+
+    # input
+    # pygame.mouse.get_pos()
+    keys = pygame.key.get_pressed()
+    player_direction.x = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
+    player_direction.y = int(keys[pygame.K_DOWN]) - int(keys[pygame.K_UP])
+    player_direction = player_direction.normalize() if player_direction else player_direction
+
+    recent_keys = pygame.key.get_just_pressed()
+    if recent_keys[pygame.K_SPACE]:
+        print('Fire laser')
 
     # draw the game
     screen.fill('DarkGrey')
