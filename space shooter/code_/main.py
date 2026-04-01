@@ -22,9 +22,9 @@ class Player(pygame.sprite.Sprite):
             print('Fire laser')
 
 class Star(pygame.sprite.Sprite):
-    def __init__(self, groups):
+    def __init__(self, groups, star_surf):
         super().__init__(groups)
-        self.image = pygame.image.load(join('images', 'star.png')).convert_alpha()
+        self.image = star_surf
         self.rect = self.image.get_frect(center = (random.randint(0, WINDOW_WIDTH), random.randint(0, WINDOW_HEIGHT)))
     def update(self, dt):
         screen.blit(self.image, self.rect)
@@ -43,6 +43,9 @@ surf.fill('BlueViolet')
 x = 100
 
 all_sprites = pygame.sprite.Group()
+star_surf = pygame.image.load(join('images', 'star.png')).convert_alpha()
+for i in range(20):
+    Star(all_sprites, star_surf)
 player = Player(all_sprites)
 
 # Imports
@@ -53,12 +56,18 @@ meteor_rect = meteor_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 
 laser_surf = pygame.image.load(join('images', 'laser.png')).convert_alpha()
 laser_rect = laser_surf.get_frect(bottomleft = (20, WINDOW_HEIGHT - 20))
 
+# custom events
+meteor_event = pygame.event.custom_type()
+pygame.time.set_timer(meteor_event, 500)
+
 while running:
     dt = Clock.tick() / 1000
     # event loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == meteor_event:
+            print('Meteor event')
 
     
 
@@ -66,9 +75,6 @@ while running:
 
     # draw the game
     screen.fill('DarkGrey')
-    for pos in star_positions:
-        screen.blit(star_surf, pos)
-
     all_sprites.draw(screen)
     pygame.display.update()
 
