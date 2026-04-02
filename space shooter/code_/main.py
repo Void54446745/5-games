@@ -31,7 +31,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.center += self.direction * self.speed * dt
         recent_keys = pygame.key.get_just_pressed()
         if recent_keys[pygame.K_SPACE] and self.can_shoot:
-            print('Fire laser')
+            Laser(all_sprites, laser_surf, self.rect.midtop)
             self.can_shoot = False
             self.laser_shoot_time = pygame.time.get_ticks()
         
@@ -51,6 +51,11 @@ class Laser(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = laser_surf
         self.rect = self.image.get_frect(midbottom = pos)
+    
+    def update(self, dt):
+        self.rect.centery -= 400 * dt
+        if self.rect.bottom < 0:
+            self.kill()
 
 
 # General setup
