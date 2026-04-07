@@ -6,7 +6,7 @@ import random
 class Player(pygame.sprite.Sprite):
     def __init__(self, groups):
         super().__init__(groups)
-        self.image = pygame.image.load(join('images', 'player.png')).convert_alpha()
+        self.image = pygame.image.load(join('space shooter','images', 'player.png')).convert_alpha()
         self.rect = self.image.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
         self.direction = pygame.math.Vector2()
         self.speed = 300
@@ -73,6 +73,18 @@ class Meteor(pygame.sprite.Sprite):
             self.kill()
 
 
+def collisions():
+    global running
+
+    collision_sprites = pygame.sprite.spritecollide(player, meteor_sprites, True)
+    if collision_sprites:
+        running = False
+
+    for laser in laser_sprites:
+        collided_sprites = pygame.sprite.spritecollide(laser, meteor_sprites, True)
+        if collided_sprites:
+            laser.kill()
+
 # General setup
 pygame.init()
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
@@ -84,9 +96,11 @@ Clock = pygame.time.Clock()
 
 
 # Imports
-meteor_surf = pygame.image.load(join('images', 'meteor.png')).convert_alpha()
-laser_surf = pygame.image.load(join('images', 'laser.png')).convert_alpha()
-star_surf = pygame.image.load(join('images', 'star.png')).convert_alpha()
+meteor_surf = pygame.image.load(join('space shooter','images', 'meteor.png')).convert_alpha()
+laser_surf = pygame.image.load(join('space shooter','images', 'laser.png')).convert_alpha()
+star_surf = pygame.image.load(join('space shooter','images', 'star.png')).convert_alpha()
+font = pygame.font.Font(None, 20)
+text_surf = font.render('text', True, 'red')
 
 # sprites
 all_sprites = pygame.sprite.Group()
@@ -112,14 +126,12 @@ while running:
 
     
     all_sprites.update(dt)
-    collision_sprites = pygame.sprite.spritecollide(player, meteor_sprites, False)
-    if collision_sprites:
-        player.kill()
-    pygame.sprite.groupcollide(meteor_sprites, laser_sprites, True, True)
+    collisions()
 
     # draw the game
-    screen.fill('DarkGrey')
+    screen.fill('black')
     all_sprites.draw(screen)
+    sereen.blit('text_surface', )
     pygame.display.update()
 
 pygame.quit()
